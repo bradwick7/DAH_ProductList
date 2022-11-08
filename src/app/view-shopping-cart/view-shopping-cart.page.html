@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-tab-button slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-tab-button>
+    <ion-title slot="start" class="toolbar-header"> Shopping Cart</ion-title>
+    <ion-title slot="end" class="toolbar-header"> Total $ {{total}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col>
+      <ion-list>
+        <ion-item *ngFor="let product of cartProducts; let i=index">
+          <ion-label>{{product.name}}</ion-label>
+          <ion-button
+            (click)="removeProduct(i, product)"
+            slot="end"
+            size="default"
+          >
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+          <ion-button
+            (click)="getProductName(product.name)"
+            slot="end"
+            size="default"
+          >
+            <ion-icon name="arrow-forward"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+  </ion-row>
+</ion-content>

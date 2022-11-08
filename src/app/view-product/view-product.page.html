@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title slot="end" class="toolbar-header">Product details</ion-title>
+    <ion-tab-button slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-tab-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card class="card">
+    <img class="image" [src]="product.image" />
+    <ion-card-header>
+      <ion-card-title>
+        <ion-label>
+          <h2>Name: {{product.name}}</h2>
+          <h2>Price: $ {{product.price}}</h2>
+        </ion-label>
+      </ion-card-title>
+    </ion-card-header>
+  </ion-card>
+</ion-content>
