@@ -1,57 +1,71 @@
 import { Injectable } from '@angular/core';
 import { Product, ProductList } from '../models/products';
+import { map } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
   public products: Product[];
-  public cartProducts: Product[];
-  public total: number;
 
-  constructor() {
+  constructor(private firestore: AngularFirestore) {
     this.products = ProductList;
-    this.cartProducts = [];
-    this.total = 0;
   }
 
-  public getProducts(): Product[] {
-    return this.products;
+  public getProducts() {
+    return this.firestore
+      .collection('products')
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            const data = a.payload.doc.data() as Product;
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
   }
 
-  public getTotal(): number {
-    return this.total;
+  public getCartProducts() {
+    return this.firestore
+      .collection('cart')
+      .snapshotChanges()
+      .pipe(
+        map((actions) => {
+          return actions.map((a) => {
+            let data = a.payload.doc.data() as Product;
+            const id = a.payload.doc.id;
+            data.id = id;
+            return { id, ...data };
+          });
+        })
+      );
   }
 
-  public getCartProducts(): Product[] {
-    return this.cartProducts;
+  public removeProductCart(id: string) {
+    this.firestore.collection('cart').doc(id).delete();
   }
 
   public addToCart(product: Product) {
-    this.cartProducts.push(product);
-    this.total += product.price;
+    this.firestore.collection('cart').add(product);
   }
 
-  public removeProduct(index: number): Product[] {
-    this.products.splice(index, 1);
-    return this.products;
+  public removeProduct(id: string) {
+    this.firestore.collection('products').doc(id).delete();
   }
 
-  public removeProductCart(index: number, prod: Product): Product[] {
-    this.total = this.total - prod.price;
-    this.cartProducts.splice(index, 1);
-    return this.cartProducts;
-  }
-
-  public getProductName(name: string): Product {
-    let item: Product;
-    item = this.products.find((item) => {
-      return item.name === name;
-    });
-    return item;
+  public getProductById(id: string) {
+    let result = this.firestore.collection('products').doc(id).valueChanges();
+    return result;
   }
 
   public addProduct(product: Product) {
-    this.products.push(product);
+    this.firestore.collection('products').add(product);
+  }
+
+  public updateProduct(product: Product, id: string) {
+    this.firestore.doc('products/' + id).update(product);
   }
 }

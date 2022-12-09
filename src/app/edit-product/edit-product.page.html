@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar>
+    Update Product
+    <ion-tab-button slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-tab-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="myForm">
+    <!-- Name -->
+    <ion-item class="ion-margin">
+      <ion-label position="stacked">Name</ion-label>
+      <ion-input
+        formControlName="name"
+        type="text"
+        placeholder="Product name"
+        [value]="product.name"
+      ></ion-input>
+    </ion-item>
+    <!-- Price -->
+    <ion-item class="ion-margin">
+      <ion-label position="stacked">Price</ion-label>
+      <ion-input
+        formControlName="price"
+        type="number"
+        placeholder="Product price"
+        [value]="product.price"
+      ></ion-input>
+    </ion-item>
+    <!-- Photo -->
+    <ion-item class="ion-margin">
+      <ion-label position="stacked">Image URL</ion-label>
+      <ion-input
+        formControlName="image"
+        type="text"
+        placeholder="Product image URL"
+        [value]="product.image"
+      ></ion-input>
+    </ion-item>
+  </form>
+
+  <ion-button (click)="updateProduct()"> Save Changes </ion-button>
+</ion-content>

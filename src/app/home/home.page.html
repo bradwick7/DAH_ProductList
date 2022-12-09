@@ -3,6 +3,7 @@
     <ion-title> Product List</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="viewShoppingCart()">
+        View Shopping Cart
         <ion-icon class="cart-icon" name="cart"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -15,15 +16,37 @@
       <ion-list>
         <ion-item *ngFor="let product of products; let i=index">
           <ion-label>{{product.name}}</ion-label>
+          <ion-label>$ {{product.price}}</ion-label>
+          <!-- Delete product -->
+          <ion-button
+            (click)="removeProduct(product.id)"
+            slot="end"
+            size="default"
+            color="danger"
+          >
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+          <!-- Update product -->
+          <ion-button
+            (click)="updateProduct(product.id)"
+            slot="end"
+            size="default"
+            color="warning"
+          >
+            <ion-icon name="options"></ion-icon>
+          </ion-button>
+          <!-- Add to cart -->
           <ion-button
             (click)="addProductCart(product)"
             slot="end"
             size="default"
+            color="secondary"
           >
             <ion-icon name="add"></ion-icon>
           </ion-button>
+          <!-- View product -->
           <ion-button
-            (click)="getProductName(product.name)"
+            (click)="viewProduct(product.id)"
             slot="end"
             size="default"
             color="primary"

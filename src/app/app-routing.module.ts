@@ -18,7 +18,11 @@ const routes: Routes = [
   {
     path: 'view-shopping-cart',
     loadChildren: () => import('./view-shopping-cart/view-shopping-cart.module').then( m => m.ViewShoppingCartPageModule)
+  },  {
+    path: 'edit-product',
+    loadChildren: () => import('./edit-product/edit-product.module').then( m => m.EditProductPageModule)
   },
+
 ];
 
 @NgModule({

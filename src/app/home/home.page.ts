@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../models/products';
 import { ProductService } from '../services/product.service';
 import { AlertController } from '@ionic/angular';
@@ -9,38 +9,75 @@ import { Router } from '@angular/router';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   public products: Product[];
   public newProduct: Product;
+  public product: Product;
+  public id: string;
 
   constructor(
     private productService: ProductService,
     private alertController: AlertController,
     private router: Router
   ) {
-    this.products = this.productService.getProducts();
+    this.productService.getProducts().subscribe((res) => {
+      this.products = res;
+      console.log(this.products);
+    });
+  }
+
+  ngOnInit(): void {
+    this.product = {
+      name: '',
+      price: 0,
+      image: '',
+    };
+  }
+
+  public async removeProduct(id: string) {
+    const alert = await this.alertController.create({
+      header: 'Are you sure?',
+      subHeader: 'Do you wish to remove this item?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {},
+        },
+        {
+          text: 'Yes',
+          role: 'confirm',
+          handler: () => {
+            this.productService.removeProduct(id);
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   public async addProductCart(prod: Product) {
     this.productService.addToCart(prod);
-
     const alert = await this.alertController.create({
       subHeader: prod.name + ' added to cart!',
       buttons: ['OK'],
     });
-
     await alert.present();
   }
 
-  public getProductName(name: String) {
-    this.router.navigate(['/view-product'], {
-      queryParams: { name: name },
+  public updateProduct(id: String) {
+    this.router.navigate(['/edit-product'], {
+      queryParams: { id: id },
     });
   }
 
   public viewShoppingCart() {
-    this.router.navigate(['/view-shopping-cart'], {
-      queryParams: { name: name },
+    this.router.navigate(['/view-shopping-cart'], {});
+  }
+
+  public viewProduct(id: string) {
+    this.router.navigate(['/view-product'], {
+      queryParams: { id: id },
     });
   }
 

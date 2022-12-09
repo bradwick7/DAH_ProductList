@@ -12,8 +12,8 @@ ProductService;
   styleUrls: ['./view-shopping-cart.page.scss'],
 })
 export class ViewShoppingCartPage implements OnInit {
-  public cartProducts: Product[];
-  public total: number;
+  public products: Product[];
+  public total: number = 0;
 
   constructor(
     private alertController: AlertController,
@@ -22,17 +22,27 @@ export class ViewShoppingCartPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cartProducts = this.productService.getCartProducts();
-    this.total = this.productService.getTotal();
-  }
+    this.productService.getCartProducts().subscribe((res) => {
+      this.products = res;
+      console.log(this.products);
 
-  public getProductName(name: String) {
-    this.router.navigate(['/view-product'], {
-      queryParams: { name: name },
+      this.getTotal();
     });
   }
 
-  public async removeProduct(pos: number, prod: Product) {
+  public getTotal() {
+    this.products.forEach((element) => {
+      this.total += element.price;
+    });
+  }
+
+  public viewProduct(id: string) {
+    this.router.navigate(['/view-product'], {
+      queryParams: { id: id },
+    });
+  }
+
+  public async removeProduct(id: string) {
     const alert = await this.alertController.create({
       header: 'Are you sure?',
       subHeader: 'Do you wish to remove this item?',
@@ -46,11 +56,8 @@ export class ViewShoppingCartPage implements OnInit {
           text: 'Yes',
           role: 'confirm',
           handler: () => {
-            this.cartProducts = this.productService.removeProductCart(
-              pos,
-              prod
-            );
-            this.total = this.productService.getTotal();
+            this.total = 0;
+            this.productService.removeProductCart(id);
           },
         },
       ],

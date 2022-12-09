@@ -12,17 +12,19 @@
   <ion-row>
     <ion-col>
       <ion-list>
-        <ion-item *ngFor="let product of cartProducts; let i=index">
+        <ion-item *ngFor="let product of products; let i=index">
           <ion-label>{{product.name}}</ion-label>
+          <ion-label>$ {{product.price}}</ion-label>
           <ion-button
-            (click)="removeProduct(i, product)"
+            (click)="removeProduct(product.id)"
             slot="end"
             size="default"
+            color="danger"
           >
             <ion-icon name="trash"></ion-icon>
           </ion-button>
           <ion-button
-            (click)="getProductName(product.name)"
+            (click)="viewProduct(product.id)"
             slot="end"
             size="default"
           >

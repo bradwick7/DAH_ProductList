@@ -2,6 +2,7 @@ export class Product {
   name: string;
   price: number;
   image?: string;
+  id?: string;
 }
 
 export const ProductList = [
